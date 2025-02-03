@@ -5,27 +5,32 @@ class Player:
         self.x = x
         self.y = y
         self.color = color
+        self.locked_direction = None
 
     def update(self, keys, cols, rows, obstacles):
-        dx, dy = 0, 0
+        if self.locked_direction is None:
+            if keys[pygame.K_LEFT]:
+                self.locked_direction = (-1, 0)
+            elif keys[pygame.K_RIGHT]:
+                self.locked_direction = (1, 0)
+            elif keys[pygame.K_UP]:
+                self.locked_direction = (0, -1)
+            elif keys[pygame.K_DOWN]:
+                self.locked_direction = (0, 1)
 
-        if keys[pygame.K_LEFT]:
-            dx -= 1
-        if keys[pygame.K_RIGHT]:
-            dx += 1
-        if keys[pygame.K_UP]:
-            dy -= 1
-        if keys[pygame.K_DOWN]:
-            dy += 1
+        if self.locked_direction is not None:
+            dx, dy = self.locked_direction
+            new_x = self.x + dx
+            new_y = self.y + dy
 
-        new_x = self.x + dx
-        new_y = self.y + dy
+            if (new_x, new_y) in obstacles:
+                self.locked_direction = None
+                return
 
-        if (new_x, new_y) in obstacles:
-            return
+            if new_x < 0 or new_x >= cols or new_y < 0 or new_y >= rows:
+                self.locked_direction = None
+                return
 
-        new_x = max(0, min(new_x, cols - 1))
-        new_y = max(0, min(new_y, rows - 1))
+            self.x = new_x
+            self.y = new_y
 
-        self.x = new_x
-        self.y = new_y
