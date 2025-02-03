@@ -37,11 +37,11 @@ class Level:
             pygame.draw.rect(surface, player.color ,rect)
         for (x, y) in self.obstacles:
             rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
-            pygame.draw.rect(surface, (255, 0, 0), rect)
+            pygame.draw.rect(surface, "black", rect)
        
     def update(self, screen, dt):
         keys = pygame.key.get_pressed()
         for player in self.players:
-            player.update(keys, self.cols, self.rows)
+            player.update(keys, self.cols, self.rows, self.obstacles)
         self.draw(screen)
 
