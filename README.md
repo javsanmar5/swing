@@ -3,7 +3,7 @@
 Swing is a 2D platformer game built with Pygame. It features fluid movement, challenging obstacles, and an engaging physics-based swinging mechanic.
 
 ## Authors
-- Dario Rodriguez
+- Darío Rodríguez
 - Javier Santos
 
 ## Features
