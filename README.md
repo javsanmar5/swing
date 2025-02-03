@@ -10,8 +10,6 @@ Swing is a 2D platformer game built with Pygame. It features fluid movement, cha
 - Classic platforming gameplay with a unique swinging mechanic
 - Multiple levels with increasing difficulty
 - Smooth character movement and physics
-- Engaging soundtrack and pixel-art visuals
-- Enemy AI and environmental hazards
 
 ## Installation
 ### Requirements
