@@ -34,3 +34,7 @@ class Player:
             self.x = new_x
             self.y = new_y
 
+    def has_won(self, win_pos: tuple) -> bool:
+        return self.x == win_pos[0] and self.y == win_pos[1] 
+
+

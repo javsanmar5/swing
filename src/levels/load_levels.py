@@ -9,5 +9,5 @@ def load_levels(directory="src/levels"):
         filename = os.path.splitext(os.path.basename(filepath))[0]
         level_name = filename.capitalize()   
         levels[level_name] = level_layout
-    return levels
+    return dict(sorted(levels.items())) 
 
