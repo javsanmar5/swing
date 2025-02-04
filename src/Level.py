@@ -1,5 +1,9 @@
 import pygame
+import os
 from entities.Player import Player 
+
+OBSTACLE_IMAGE = pygame.image.load(os.path.join('assets', 'stone_brick.png'))
+
 
 class Level:
     def __init__(self, layout):
@@ -44,7 +48,8 @@ class Level:
         
         for (x, y) in self.obstacles:
             rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
-            pygame.draw.rect(surface, "black", rect)
+            obstacle_resized = pygame.transform.scale(OBSTACLE_IMAGE, (tile_w, tile_h))
+            surface.blit(obstacle_resized, rect)
 
         if self.win_pos: 
             win_rect = pygame.Rect(self.win_pos[0] * tile_w, self.win_pos[1] * tile_h, tile_w, tile_h)
@@ -55,7 +60,6 @@ class Level:
         for player in self.players:
             player.update(keys, self.cols, self.rows, self.obstacles)
         self._check_won()
-        print(self.won)
         self.draw(screen)
         
     def _check_won(self) -> None:
@@ -65,3 +69,4 @@ class Level:
                     self.won = False
                     return
             self.won = True
+
