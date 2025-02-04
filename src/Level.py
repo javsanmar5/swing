@@ -8,7 +8,8 @@ class Level:
         self.cols = len(layout[0]) if self.rows > 0 else 0
         self.players = []
         self.obstacles = []
-        self.win = None
+        self.win_pos = None
+        self.won = False
         self.parse_layout()
 
     def parse_layout(self):
@@ -23,7 +24,7 @@ class Level:
                 elif tile == "X":
                     self.obstacles.append((x, y))
                 elif tile == "W":
-                    self.win = (x, y)
+                    self.win_pos = (x, y)
 
     def draw(self, surface):
         width, height = surface.get_size()
@@ -45,13 +46,22 @@ class Level:
             rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
             pygame.draw.rect(surface, "black", rect)
 
-        if self.win: 
-            win_rect = pygame.Rect(self.win[0] * tile_w, self.win[1] * tile_h, tile_w, tile_h)
+        if self.win_pos: 
+            win_rect = pygame.Rect(self.win_pos[0] * tile_w, self.win_pos[1] * tile_h, tile_w, tile_h)
             pygame.draw.rect(surface, "bisque", win_rect) 
 
-    def update(self, screen, dt):
+    def update(self, screen, dt) -> None:
         keys = pygame.key.get_pressed()
         for player in self.players:
             player.update(keys, self.cols, self.rows, self.obstacles)
+        self._check_won()
+        print(self.won)
         self.draw(screen)
-
+        
+    def _check_won(self) -> None:
+        if self.win_pos:
+            for player in self.players:
+                if not player.has_won(self.win_pos):
+                    self.won = False
+                    return
+            self.won = True
