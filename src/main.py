@@ -32,24 +32,25 @@ def main():
                 screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
         screen.fill((0, 0, 0))
 
-        if game_state == "playing":
-            level_instance.update(screen, dt)
-            if level_instance.won:
-                game_state = "won"
-        elif game_state == "won":
-            result = won(screen, clock, WIDTH, HEIGHT)
-            if result == "exit_to_menu":
-                game_state = "menu"
-            elif result == "next_level":
-                current_level_name = _get_next_level_name(current_level_name)
+        match game_state:
+            case "playing":
+                level_instance.update(screen, dt)
+                if level_instance.won:
+                    game_state = "won"
+            case "won":
+                result = won(screen, clock, WIDTH, HEIGHT)
+                if result == "exit_to_menu":
+                    game_state = "menu"
+                elif result == "next_level":
+                    current_level_name = _get_next_level_name(current_level_name)
+                    level_layout = levels[current_level_name]
+                    level_instance = Level(level_layout)
+                    game_state = "playing"
+            case "menu":
+                current_level_name = menu(screen, clock, WIDTH, HEIGHT, menu_options)
                 level_layout = levels[current_level_name]
                 level_instance = Level(level_layout)
                 game_state = "playing"
-        elif game_state == "menu":
-            current_level_name = menu(screen, clock, WIDTH, HEIGHT, menu_options)
-            level_layout = levels[current_level_name]
-            level_instance = Level(level_layout)
-            game_state = "playing"
 
         pygame.display.flip()
 

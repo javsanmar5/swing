@@ -3,7 +3,8 @@ import os
 from entities.Player import Player
 
 OBSTACLE_IMAGE = pygame.image.load(os.path.join('assets', 'stone_brick.png'))
-
+DOOR_IMAGE = pygame.image.load(os.path.join('assets', 'door.png'))
+KEY_IMAGE = pygame.image.load(os.path.join('assets', 'key.png'))
 
 class Level:
     def __init__(self, layout):
@@ -12,9 +13,12 @@ class Level:
         self.cols = len(layout[0]) if self.rows > 0 else 0
         self.players = []
         self.obstacles = []
+        self.doors = []
+        self.open_keys = []
         self.win_pos = None
         self.won = False
         self.parse_layout()
+
 
     def parse_layout(self):
         for y, row in enumerate(self.layout):
@@ -29,6 +33,10 @@ class Level:
                     self.obstacles.append((x, y))
                 elif tile == "W":
                     self.win_pos = (x, y)
+                elif tile == "D":
+                    self.doors.append((x,y))
+                elif tile == "K":
+                    self.open_keys.append((x, y))
 
     def draw(self, surface):
         width, height = surface.get_size()
@@ -55,10 +63,22 @@ class Level:
             obstacle_resized = pygame.transform.scale(OBSTACLE_IMAGE, (tile_w, tile_h))
             surface.blit(obstacle_resized, rect)
 
+        for (x, y) in self.doors:
+            rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
+            door_resized = pygame.transform.scale(DOOR_IMAGE, (tile_w, tile_h))
+            surface.blit(door_resized, rect)
+
+        for (x, y) in self.open_keys:
+            rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
+            key_resized = pygame.transform.scale(KEY_IMAGE, (tile_w, tile_h))
+            surface.blit(key_resized, rect)
+
+
+
     def update(self, screen, dt) -> None:
         keys = pygame.key.get_pressed()
         for player in self.players:
-            player.update(keys, self.cols, self.rows, self.obstacles)
+            player.update(keys, self.cols, self.rows, self.obstacles, self.doors, self.open_keys)
         self._check_won()
         self.draw(screen)
         
