@@ -1,6 +1,6 @@
 import pygame
 import os
-from entities.Player import Player 
+from entities.Player import Player
 
 OBSTACLE_IMAGE = pygame.image.load(os.path.join('assets', 'stone_brick.png'))
 
@@ -41,6 +41,10 @@ class Level:
                 color = (100, 100, 100) if (x + y) % 2 == 0 else (120, 120, 120)
                 pygame.draw.rect(surface, color, rect)
 
+        if self.win_pos: 
+            win_rect = pygame.Rect(self.win_pos[0] * tile_w, self.win_pos[1] * tile_h, tile_w, tile_h)
+            pygame.draw.rect(surface, "bisque", win_rect) 
+
         for player in self.players:
             x, y = player.x, player.y 
             rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
@@ -50,10 +54,6 @@ class Level:
             rect = pygame.Rect(x * tile_w, y * tile_h, tile_w, tile_h)
             obstacle_resized = pygame.transform.scale(OBSTACLE_IMAGE, (tile_w, tile_h))
             surface.blit(obstacle_resized, rect)
-
-        if self.win_pos: 
-            win_rect = pygame.Rect(self.win_pos[0] * tile_w, self.win_pos[1] * tile_h, tile_w, tile_h)
-            pygame.draw.rect(surface, "bisque", win_rect) 
 
     def update(self, screen, dt) -> None:
         keys = pygame.key.get_pressed()
